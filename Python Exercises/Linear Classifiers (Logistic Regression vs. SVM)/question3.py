@@ -4,7 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
-from scipy import stats
+from sklearn import preprocessing
 
 
 #Read the dataset
@@ -17,18 +17,22 @@ index = data.iloc[:,2] - 1
 
 #extracting the continous features describing the crabs
 data = data.iloc[:,3:]
-data = stats.zscore(data)
-data = pd.DataFrame(data)
+
+scaler = preprocessing.StandardScaler()
+data = scaler.fit_transform(data)
 
 #splitting the data
 X_train, X_test, y_train, y_test = train_test_split(data, sex, test_size=0.25, random_state = 1)
 
 #Initializing logistic regression model
 logreg = LogisticRegression()
+
 #training the model
 logreg.fit(X_train, y_train)
+
 #getting predictions from the trained logistic regression model
 y_predictions = logreg.predict(X_test)
+
 #forming the confusion matrix
 confusion_matrix = metrics.confusion_matrix(y_test, y_predictions)
 
@@ -39,10 +43,13 @@ print("Logistic Regression Recall:",metrics.recall_score(y_test, y_predictions))
 
 #Initializing the SVM model
 svm = SVC()
+
 #training the svm model
 svm.fit(X_train, y_train)
+
 #getting predictions from the trained svm model
 y_predictions = svm.predict(X_test)
+
 #forming the confusion matrix
 confusion_matrix = metrics.confusion_matrix(y_test, y_predictions)
 
