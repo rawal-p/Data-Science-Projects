@@ -2,6 +2,8 @@ from sklearn.linear_model import Lasso
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn import preprocessing
+
 from scipy import stats
 
 
@@ -26,9 +28,9 @@ train  = pd.read_csv('musicdata.txt', sep = " ",header = None)
 test = pd.read_csv('musictestdata.txt', sep = " ", header = None)
 
 #normalize both datasets 
-train = stats.zscore(train)
-test = stats.zscore(test)
-
+scaler = preprocessing.StandardScaler()
+train = scaler.fit_transform(train)
+test = scaler.fit_transform(test)
 train = pd.DataFrame(train)
 test = pd.DataFrame(test)
 
